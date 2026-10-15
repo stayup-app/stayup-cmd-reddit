@@ -1,0 +1,18 @@
+services:
+  fetch_reddit:
+    build: .
+    restart: "no"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      STAYUP_API_URL: ${STAYUP_API_URL:-http://localhost:3000}
+      STAYUP_API_KEY: ${STAYUP_API_KEY}
+      REDDIT_CLIENT_ID: ${REDDIT_CLIENT_ID:-}
+      REDDIT_CLIENT_SECRET: ${REDDIT_CLIENT_SECRET:-}
+
+  test:
+    build: .
+    image: stayup-test
+    entrypoint: ["python", "-m", "pytest", "tests/", "-v"]
+    restart: "no"

@@ -1,0 +1,28 @@
+name: Daily Reddit fetch
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch: # permet de lancer manuellement depuis GitHub
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Reddit fetch
+        env:
+          STAYUP_API_URL: ${{ secrets.STAYUP_API_URL }}
+          STAYUP_API_KEY: ${{ secrets.STAYUP_API_KEY }}
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+        run: python fetch_reddit.py
